@@ -1,0 +1,260 @@
+\documentclass{bioinfo}
+\copyrightyear{2016} \pubyear{2016}
+
+\access{Advance Access Publication Date: Day Month Year}
+\appnotes{Manuscript Category}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{subfigure}
+\usepackage{mathrsfs}
+\begin{document}
+\firstpage{1}
+
+\subtitle{Systems biology}
+
+\title[short Title]{Group Based Gene-phenotype Association prediction}
+\author[Sample \textit{et~al}.]{YaoGong Zhang\,$^{\text{\sfb 1,2}}$, YuXiang Hong\,$^{\text{\sfb 1,2}}$, Xin Fan\,$^{\text{\sfb 1,2}}$ YaLou Huang\,$^{\text{\sfb 1,2}}$, and MaoQiang Xie\,$^{\text{\sfb
+1,2}*}$}
+\address{$^{\text{\sf 1}}$College of Software, NanKai University, TianJin, 300350, China and \\
+$^{\text{\sf 2}}$ College of Computer and Control Engineering, NanKai University, TianJin, 300350,
+China.}
+
+\corresp{$^\ast$To whom correspondence should be addressed.}
+
+\history{Received on XXXXX; revised on XXXXX; accepted on XXXXX}
+
+\editor{Associate Editor: XXXXXXX}
+
+\abstract{\textbf{Motivation:}
+Clinical diseases are characterized by distinct
+phenotype ontologies. To identify disease genes is to elucidate the gene-phenotype relationships. Mutations in functionally related genes
+may result in similar phenotypes. It is reasonable to predict disease-causing genes by integrating phenotypic data and genomic data.
+Gene-Phenotype association prediction has been an essential biological problem these years, Gene groups (such like:\ KEGG pathways) give us a priori to constrain genes within groups. However, such gene group information rarely be used for gene-phenotype association prediction problem. As we know a gene group (like KEGG pathways) reveals a biological process in gene levels, all genes in such group participate the biological process. So an intuitive inference is that all genes within a group should be similar. Thereby It is challenging to utilize the consistence of genes within a group to get a better association prediction.
+\\
+\textbf{Results:}
+In this paper, we propose a novel method, Group-based Nonnegative Matrix Factorization (GNMF)
+ to utilize the group information of genes and phenotype to in factoring genome-phenome association data. In GNMF, we constrain the genes within a group to keep similar to each other. Through GNMF, we can get a better gene and phenotype representation in latent space. We conduct a statistic test and the result show that group do help the prediction significantly. We evaluate the GNMF algorithm with 10-fold cross-validation on MGI data and OMIM data. In the experiments, the GNMF achieved best overall rankings compared with the baseline.
+\\
+\textbf{Availability:} The code used in this paper is provided on: https://github.com/nkiip/****. \\
+\textbf{Contact:} \href{xiemq@nankai.edu.cn}{xiemq@nankai.edu.cn}\\
+\textbf{Supplementary information:} Supplementary data are available at \textit{Bioinformatics}
+online.}
+\maketitle
+\section{Introduction}
+
+Phenotypes denote the observable physical or biological traits of
+an organism. Understanding the relations between genes and gene
+functions (or related phenotypes) is one of the main objectives of
+genetics in the post-genome era [1] [2] [3]. With the advent of
+OMICS techniques, the number of uncovered gene-phenotype
+associations has increased significantly over the last several
+decades. However, the number of genes with identified pheno-
+types has not been able to reach the genomic scale yet, due to
+some technical challenges such as the multi-functionality of genes
+and heterogeneity of diseases [4 6]. At this moment, various types
+of proteomic and/or genomic data (such as protein-protein
+interaction (PPI) data [6\ 12], sequence data [13\ 14] and function
+annotations [15\ 19]) have been used to identify gene-phenotype
+associations. Previous studies showed that products of different
+genes tend to physically interact with each other if these genes are
+involved in causation of similar disorders [20\ 21]. Similar
+phenotypes are determined by genes with related functions, too
+[22]. Researchers used this information to predict phenotypes by
+the interactome [6\ 8] or by the topology of the PPI network [7].
+Moreover, sequence information, together with function annota-
+tions, has been used to prioritize candidate gene-phenotype
+associations. For example, the features of sequence data were used
+to build a model, which was then trained by the function
+annotations [13\ 14 23]. Researchers also employed machine
+learning approaches and function annotations to construct
+models[16] [24] [14].
+
+%\enlargethispage{12pt}
+\begin{methods}
+\section{Methods}
+\begin{table}[t]
+\caption{Notations}
+\label{sample-table}
+\begin{center}
+\begin{tabular}{ll}
+\multicolumn{1}{c}{\bf PART}  &\multicolumn{1}{c}{\bf DESCRIPTION}
+\\ \hline \\
+$n$          &the number of genes \\
+$m$          &the number of phenotypes \\
+$K$          &the dimension of latent space \\
+$\bm{R}$          &Genome-phenome association matrix \\
+$\bm{U_{n\times k}}$         &gene distribution\\
+$\bm{V}_{k\times m}$         &phenotype distribution \\
+$\bm{X}_{i\cdot}$  &the $i$th row of matrix $\bm{X}$ \\
+$\bm{X}_{\cdot j}$                    &the $j$th column of matrix $\bm{X}$ \\
+\end{tabular}
+\end{center}
+\end{table}
+\subsection{Problem Formulation}
+
+\subsection{Biological Interpretation}
+
+\subsection{Group constraint NMF}
+\begin{equation}\label{}
+\begin{split}
+\sum_{ij}^{}\bm{S}_{ij}||\bm{U}_{i\cdot}-\bm{U}_{j\cdot}||^2
+=tr\Big(\bm{U}^T(\bm{D}-\bm{S})\bm{U}\Big)
+\end{split}
+\end{equation}
+objective function:
+\begin{equation}\label{obj_fun}
+\begin{split}
+\mathcal{L}=&\frac{1}{2}||\bm{Y} \odot (\bm{R} -\bm{U}\bm{V})||^2
++\frac{\lambda_0}{2}\sum_{G\in\mathcal{G}}^{}\sum_{j\in G}^{}||\bm{U}_{G_j\cdot}-\bar{\bm{U}}_{G\cdot}||^2
+%+\lambda_2\bm{P}_1
+\\
+&+\frac{\lambda_1}{2}(tr(\bm{U}^T(\bm{D_1-S_1})\bm{U})+tr(\bm{V}(\bm{D_2-S_2})\bm{V}^T))\\
+&  +\frac{\lambda_2}{2} (||\bm{U}||^2+||\bm{V}||^2)\\
+&\mathrm{s.t. }\quad \bm{U}>0\ \bm{V}>0
+\end{split}
+\end{equation}
+The gradient of Eq. (\ref{obj_fun}) with respect to $\bm{U}_{i\cdot}$ can be expressed as follows,
+
+\begin{equation}\label{equ:U_gradient}
+\begin{split}
+\frac{\partial{\mathcal{L}}}{\partial{(\bm{U}_{i\cdot})}}=
+&-\Big(\bm{Y}_{i\cdot} \odot (\bm{R}_{i\cdot} -\bm{U}_{i\cdot}\bm{V})\Big)\bm{V}^T
++\lambda_0\sum_{G\in\mathcal{G}\&i\in G}^{}(\bm{U}_{i\cdot}-\bar{\bm{U}}_{G\cdot})
+\\
+&+\lambda_1 (\bm{(D_1-S_1)U})_{i\cdot}+\lambda_2(\bm{U})_{i\cdot}\\
+\end{split}
+\end{equation}
+The gradient of Eq. (\ref{obj_fun}) with respect to $\bm{V}_{\cdot j}$ can be expressed as follows,
+
+\begin{equation}\label{equ:V_gradient}
+\begin{split}
+\frac{\partial{\mathcal{L}}}{\partial{(\bm{V}_{\cdot j})}}=
+&-\bm{U}^T\Big(\bm{Y}_{\cdot j} \odot (\bm{R}_{\cdot j} -\bm{U}\bm{V}_{\cdot j})\Big)
++\lambda_1 (\bm{V(D_2-S_2)})_{\cdot j}\\
+&+\lambda_2(\bm{V})_{\cdot j}\\
+\end{split}
+\end{equation}
+\subsubsection{Computation of $\bm{U}$ and $\bm{V}$}
+the multiplicative update rule is:
+\begin{equation}\label{equ:U_update}
+\begin{split}
+\bm{U}_{ij}\leftarrow \bm{U}_{ij}
+\frac{\Bigg((\bm{Y}_{i\cdot}\odot \bm{R}_{i\cdot})\bm{V}^T+\lambda_0 \bm{X}_1+\lambda_1 (\bm{S_1U})_{i\cdot}\Bigg)_j}
+{\Bigg(\big(\bm{Y}_{i\cdot}\odot(\bm{U}_{i\cdot}\bm{V})\big)\bm{V}^T+\lambda_0 \bm{X}_2
++\lambda_1(\bm{D_1U})_{i\cdot}+\lambda_2\bm{U}_{i\cdot}\Bigg)_j}\\
+\end{split}
+\end{equation}
+where $\bm{X}_1=\lambda_0\sum\limits_{G\in\mathcal{G}\&i\in G}^{}\bar{\bm{U}}_{G\cdot}$, \ $\bm{X}_2=\sum\limits_{G\in\mathcal{G}
+\&i\in G}^{}\bm{U}_{i\cdot}$
+\begin{equation}\label{equ:V_update}
+\begin{split}
+\bm{V}_{ij}\leftarrow \bm{V}_{ij}
+\frac{\Big(\bm{U}^T(\bm{Y}_{\cdot j}\odot \bm{R}_{\cdot j}) + \lambda_1(\bm{VS_2})_{\cdot j}\Big)_i}
+{\Big(\bm{U}^T\big(\bm{Y}_{\cdot j}\odot(\bm{U}\bm{V}_{\cdot j})\big)
++\lambda_1(\bm{VD_2})_{\cdot j}+\lambda_2\bm{V}_{\cdot j}\Big)_i}\\
+\end{split}
+\end{equation}
+update rule for $\bar{\bm{U}}_{G\cdot}$:
+\begin{equation}\label{equ:V_gradient}
+\begin{split}
+\bar{\bm{U}}_{G\cdot}\leftarrow
+\frac{\sum\limits_{i\in G}^{}\bar{\bm{U}}_{i\cdot}}
+{\sum\limits_{i\in G}^{}1}\\
+\end{split}
+\end{equation}
+\subsection{Optimization}
+\begin{algorithm}[t]
+\caption{\textbf{GNMF}}\label{alg:GNMF}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\label{alg:pf}
+\begin{algorithmic}[1]
+\REQUIRE
+    \STATE $G$: hierarchical HIN;
+    \STATE $\mathcal{P}$: the set of meta paths connecting genes;
+    \STATE $\lambda_1$,$\lambda_2$: adapting parameter;
+    \STATE $\alpha$: step size;
+    \STATE $\epsilon$: convergence tolerance;
+\ENSURE ${\bm{W}}$: the weight matrix of all genes on all paths
+%\STATE $P \leftarrow \{(i,j)|q_i=q_j,y_i\succ y_j\}$
+\FOR{{each meta path $\mathcal{P}_l$ $\in$ $\mathcal{P}$}}
+    \STATE {Evaluate user similarity $\bm{S}^l$}
+    \STATE {Calculate predicting score $\hat{\bm{R}^l}$ with Eq.()}
+    %\STATE \texttt{}
+\ENDFOR
+\STATE ${\bm{W}}$ $\leftarrow$ random values(between [0,1])
+%\STATE \text{stop$\_$condition:iterate number is more than $N$ or the change of objective function's value is less than $\varepsilon$}
+%\STATE $ite = 1$
+\REPEAT
+    \STATE Calculate $\frac{\partial{\mathcal{L}}}{\partial{(\bm{W})_{ij}}}$ with Eq.()
+    \STATE Update $\bm{W}_{ij}\leftarrow max(0,\bm{W}_{ij}-\alpha \frac{\partial{\mathcal{L}}}{\partial{(\bm{W})_{ij}}})$
+    %\STATE Normalize $(\bm{P}_1)_{ij}\leftarrow \frac{(\bm{P}_1)_{ij}}{\sum_{i}(\bm{P}_1)_{ij}}, \quad
+%(\bm{P}_2)_{ij}\leftarrow \frac{(\bm{P}_2)_{ij}}{\sum_{i}(\bm{P}_2)_{ij}}$
+\UNTIL convergence
+\RETURN ${\bm{W}}$
+\end{algorithmic}
+\end{algorithm}
+\end{methods}
+
+\begin{result}
+\section{Result and Discussion}
+\subsection{Simulation study}
+\subsection{Data preparation}
+Gene and protein data
+Gene and protein data of the six species were obtained from BIOMART of Ensembl (http://www.ensembl.org/biomart/martview). As we focused mainly on PPIs and orthologous proteins, the genes retrieved were restricted to the protein-coding genes. The corresponding Ensembl Protein ID was considered because it would be cross-linked to the PPI and orthology data.
+
+PPI and orthology data
+The PPI and orthology data were retrieved from the online database resource, Search Tool for the Retrieval of Interacting Genes (STRING) database [47]. The experimentally validated PPI in Human Protein Reference Database (HPRD) [48] were also incorporated by assigning a solid high score of 0.9. The combined score was calculated using the same strategy of STRING [47]. Each interaction was assigned by a combined score of various sources, indicating the reliability of the interaction. Since the majority of interactions in STRING were derived from computations based on prediction algorithms or interolog inference, we abandoned the interactions with a combined score less than 0.5. We also obtained orthologous proteins data from the STRING database, and scanned the domains by PfamScan[49] for further domain composition calculation (see Prioritization of gene-phenotype associations).
+
+Phenotypes and known gene-phenotype associations
+The majority of the phenotypes were downloaded from the Open Biological and Biomedical Ontologies (http://www.obofoundry.org/). Known gene-phenotype associations were retrieved from the database of each corresponding species (Table S1). For humans, we incorporated two databases, the Human Phenotype Ontology (HPO)[50] and the Online Mendelian Inheritance in Man (OMIM), into our database [51], and connected OMIM to HPO by annotations from http://www.human-phenotype-ontology.org.
+
+PhenomeNET
+PhenomeNET is a cross-species phenotype network, in which the similarity between the nodes was calculated based on the information content of ontology terms [17]. We employed the information of the node pairs with a similarity score ≥0.5. With this network, the phenotypes from different species are available to be compared. PhenomeNET is available at http://phenomebrowser.net/availability.html.
+\end{result}
+\section{Conclusion}
+
+\section*{Acknowledgements}
+
+\section*{Funding}
+This work has been supported by the National Natural Science Foundation of China (No. 61300166 and No. 61105049),
+the Natural Science Foundation of Tianjin (No. 14JCQNJC00600), and the Science and Technology Planning
+Project of Tianjin (No. 13ZCZDGX01098).
+%This work has been supported by the... Text Text  Text Text.\vspace*{-12pt}
+
+%\bibliographystyle{natbib}
+%\bibliographystyle{achemnat}
+%\bibliographystyle{plainnat}
+%\bibliographystyle{abbrv}
+%\bibliographystyle{bioinformatics}
+%
+%\bibliographystyle{plain}
+%
+%\bibliography{Document}
+%{
+%%\scriptsize
+%\bibliographystyle{plain}%plain
+%\bibliography{sigproc}
+%}
+%\begin{thebibliography}{}
+%
+%\bibitem[Bofelli {\it et~al}., 2000]{Boffelli03}
+%Bofelli,F., Name2, Name3 (2003) Article title, {\it Journal Name}, {\bf 199}, 133-154.
+%
+%\bibitem[Bag {\it et~al}., 2001]{Bag01}
+%Bag,M., Name2, Name3 (2001) Article title, {\it Journal Name}, {\bf 99}, 33-54.
+%
+%\bibitem[Yoo \textit{et~al}., 2003]{Yoo03}
+%Yoo,M.S. \textit{et~al}. (2003) Oxidative stress regulated genes
+%in nigral dopaminergic neurnol cell: correlation with the known
+%pathology in Parkinson's disease. \textit{Brain Res. Mol. Brain
+%Res.}, \textbf{110}(Suppl. 1), 76--84.
+
+%
+%\end{thebibliography}
+\end{document}

@@ -1,0 +1,107 @@
+\documentclass{ctexart}
+\usepackage{CJK}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{array}
+\usepackage{subfigure}
+\usepackage{mathrsfs}
+\usepackage{ulem}
+\usepackage{float}
+\usepackage{epstopdf}
+\usepackage{subfigure}
+\usepackage{caption}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\begin{document}
+\setlength{\parindent}{0pt}
+\begin{center}
+  \uline{\textbf{实验笔记}}
+\end{center}
+\section{数据概要}
+\subsection{老鼠数据}
+\begin{table}[h]
+\caption{Notations}
+\label{sample-table}
+\begin{center}
+\begin{tabular}{lll}
+\multicolumn{1}{c}{\bf PART}&\multicolumn{1}{c}{\bf VALUE}  &\multicolumn{1}{c}{\bf DESCRIPTION}
+\\ \hline \\
+$n_1$    &1376      &基因-表型 关联矩阵中的基因数目 \\
+$m$    &5420      &基因-表型 关联矩阵中的表型数目 \\
+$n_2$    &5985      &PPI 基因-基因 关联矩阵中的基因数目 \\
+$n_3$    &7754      &pathway中所有出现的基因数目 \\
+$n_1\cap n_2$    &670      &基因-表型 关联矩阵与PPI网络中共有的基因数目 \\
+$n_1\cap n_3$    &790      &基因-表型 关联矩阵与pathway中共有的基因数目 \\
+$n_1\cap n_2\cap n_3$    &441      &基因-表型 关联矩阵,PPI,pathway,中共有的基因数目 \\
+\\ \hline \\
+\end{tabular}
+\end{center}
+\end{table}
+
+获取基因的原则：基因或者出现在PPI网络中，或者出现在pathway中，这样在目标函数中便有约束可以作用在所出现的基因上面。\\
+
+\begin{itemize}
+\item 如果选择670个基因作为基准基因集合，则会有229（670-441）个基因没有出现在任何pathway中，在计算目标函数与梯度过程中，这229个基因并不影响计算，在遍历pathway时，只考虑那441个基因便可。因此我们应将每个pathway下的基因重新筛选一次，每条pathway下，只用这441个基因来表示即可。
+\item 如果选择790个基因作为基准基因集合，则会有349（790-441）个基因没有出现在PPI网络中，此时PPI网络要保留为$790\times 790$大小，也就是说在PPI网络中有349个基因与其他基因是没有任何关联的。
+\end{itemize}
+
+
+
+%\begin{CJK}%{GBK}{song}
+%收到
+%\end{CJK}
+\section{具体实验流程}
+选择 670 个基因作为基准基因集合的实验流程：
+\begin{algorithm}[h]
+\caption{\textbf{具体实验流程}}\label{alg:CMNMF}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\label{alg:pf}
+\begin{algorithmic}[1]
+\STATE 获取670个基因的基因列表，用这1到670作为基因索引
+\STATE 用新的670个基因索引表示 基因-表型网络和基因PPI网络
+\STATE 在670个基因索引中进一步挑选出441个基因的索引列表，用于表示每个pathway下的基因
+%\REQUIRE
+%    \STATE $G$: hierarchical HIN;
+%    \STATE $\mathcal{P}$: the set of meta paths connecting genes;
+%    \STATE $\lambda_1$,$\lambda_2$: adapting parameter;
+%    \STATE $\alpha$: step size;
+%    \STATE $\epsilon$: convergence tolerance;
+%\ENSURE ${\bm{W}}$: the weight matrix of all genes on all paths
+%\STATE $P \leftarrow \{(i,j)|q_i=q_j,y_i\succ y_j\}$
+%\FOR{{each meta path $\mathcal{P}_l$ $\in$ $\mathcal{P}$}}
+%    \STATE {Evaluate user similarity $\bm{S}^l$}
+%    \STATE {Calculate predicting score $\hat{\bm{R}^l}$ with Eq.()}
+%    %\STATE \texttt{}
+%\ENDFOR
+%\STATE ${\bm{W}}$ $\leftarrow$ random values(between [0,1])
+%%\STATE \text{stop$\_$condition:iterate number is more than $N$ or the change of objective function's value is less than $\varepsilon$}
+%%\STATE $ite = 1$
+%\REPEAT
+%    \STATE Calculate $\frac{\partial{\mathcal{L}}}{\partial{(\bm{W})_{ij}}}$ with Eq.()
+%    \STATE Update $\bm{W}_{ij}\leftarrow max(0,\bm{W}_{ij}-\alpha \frac{\partial{\mathcal{L}}}{\partial{(\bm{W})_{ij}}})$
+%    %\STATE Normalize $(\bm{P}_1)_{ij}\leftarrow \frac{(\bm{P}_1)_{ij}}{\sum_{i}(\bm{P}_1)_{ij}}, \quad
+%%(\bm{P}_2)_{ij}\leftarrow \frac{(\bm{P}_2)_{ij}}{\sum_{i}(\bm{P}_2)_{ij}}$
+%\UNTIL convergence
+%\RETURN ${\bm{W}}$
+\end{algorithmic}
+\end{algorithm}
+
+选择 790 个基因作为基准基因集合的实验流程：
+\begin{algorithm}[h]
+\caption{\textbf{具体实验流程}}\label{alg:CMNMF}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+\label{alg:pf}
+\begin{algorithmic}[1]
+\STATE 获取790个基因的基因列表，用这1到790作为基因索引
+\STATE 用新的790个基因索引表示 基因-表型网络和基因pathway
+\STATE 在790个基因索引中进一步挑选出441个基因的索引列表，用于表示PPI网络，实际上在790个基因组成的PPI网络中
+，有349个基因与其他基因是没有任何关联的
+\end{algorithmic}
+\end{algorithm}
+\end{document}
